@@ -1,0 +1,28 @@
+
+Atualizacao automatica do sistema:
+  ✔ Lotofacil @started(24-01-17 08:47) @done(24-01-17 08:50) @lasted(3m50s)
+  ✔ LotofacilNumeros - db (contador geral) @started(24-01-17 08:47) @done(24-01-17 08:50) @lasted(3m55s)
+  ✔ LotofacilNumeroSaindo - db @started(24-01-17 08:47) @done(24-01-17 08:50) @lasted(3m56s)
+  ✔ LotofacilNumeroNaoSaindo - db @started(24-01-17 08:47) @done(24-01-17 08:50) @lasted(3m56s)
+  ✔ LotofacilImpares @started(24-01-17 08:50) @done(24-01-17 09:54) @lasted(1h4m16s)
+  ✔ LotofacilPares @started(24-01-17 09:45) @done(24-01-17 09:54) @lasted(9m17s)
+  ✔ LotofacilLinhas @started(24-01-17 09:54) @done(24-01-17 10:27) @lasted(33m23s)
+  ✔ LotofacilCiclo @started(24-01-17 10:27) @done(24-01-17 11:16) @lasted(49m14s)
+  ✔ LotofacilCicloDuplo @started(24-01-17 11:16) @done(24-01-17 12:56) @lasted(1h40m14s)
+  ✔ LotofacilCicloTriplo @started(24-01-17 12:56) @done(24-01-18 10:40) @lasted(21h44m13s)
+  ✔ LotofacilCicloDuploNaoSaindo @started(24-01-18 10:40) @done(24-01-18 11:17) @lasted(37m34s)
+  ✔ LotofacilCicloTriploNaoSaindo @done(24-01-18 11:17)
+  
+Routes Api:
+  ☐ @critical auth
+  
+Paginas do sistema:
+  ☐ Dashboard
+  ☐ Paginas de Números Pares e Impares
+  ☐ Páginas de Ciclo
+  ☐ @high Paginas de Login
+      
+Funcionalidades:
+  ☐ @critical Protect Routes with token JWT
+        
+// Extensão TODO+  alt + s - start | alt + c  cancelar | alt + d - done @critical  @low @high  @today

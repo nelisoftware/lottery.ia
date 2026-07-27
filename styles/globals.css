@@ -1,0 +1,80 @@
+@import 'tailwindcss';
+
+@import 'spinkit/spinkit.min.css' layer(utilities);
+
+@config '../tailwind.config.ts';
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility bg-input {
+  @apply bg-gray-200 dark:bg-gray-800;
+}
+
+@utility text-input {
+  @apply text-slate-700 dark:text-slate-400;
+}
+
+@utility text-input-label {
+  @apply text-slate-600 dark:text-slate-300;
+}
+
+@utility bg-backgroundDark {
+  @apply bg-gray-800
+    /* @apply bg-gradient-to-b from-gray-800 via-gray-800 to-gray-700 */;
+}
+
+@utility bg-background {
+  @apply bg-gray-200
+    /* @apply bg-gradient-to-b from-gray-200 via-gray-200 to-gray-100 */;
+}
+
+@utility bg-login {
+  @apply bg-linear-to-bl from-gray-950 from-10% via-sky-950 via-30% to-gray-800 to-90%;
+}
+
+@layer utilities {
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+    font-size: 1rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+:root {
+  --react-select-text-color: @apply slate-700;
+  --react-select-dropdown-bg: #e5e7eb;
+  --react-select-option-hover: #ffb225;
+}
+
+:root.dark {
+  --react-select-text-color: @apply slate-400;
+  --react-select-dropdown-bg: #324156;
+  --react-select-option-hover: #111a26;
+}

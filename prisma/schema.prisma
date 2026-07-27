@@ -1,0 +1,249 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Lotofacil {
+  id           Int      @id @default(autoincrement())
+  dataApuracao DateTime
+  numero       Int      @unique
+  bola01       Int
+  bola02       Int
+  bola03       Int
+  bola04       Int
+  bola05       Int
+  bola06       Int
+  bola07       Int
+  bola08       Int
+  bola09       Int
+  bola10       Int
+  bola11       Int
+  bola12       Int
+  bola13       Int
+  bola14       Int
+  bola15       Int
+  ganhadores   Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+model LotofacilNumeros {
+  numero Int @id
+  cont   Int
+}
+
+model LotofacilNumeroSaindo {
+  numero Int @id
+  cont   Int
+}
+
+model LotofacilNumeroNaoSaindo {
+  numero Int @id
+  cont   Int
+}
+
+model LotofacilImpares {
+  concurso Int @id
+  total    Int @default(0)
+  n01      Int @default(0)
+  n02      Int @default(0)
+  n03      Int @default(0)
+  n04      Int @default(0)
+  n05      Int @default(0)
+  n06      Int @default(0)
+  n07      Int @default(0)
+  n08      Int @default(0)
+  n09      Int @default(0)
+  n10      Int @default(0)
+  n11      Int @default(0)
+  n12      Int @default(0)
+  n13      Int @default(0)
+}
+
+model LotofacilPares {
+  concurso Int @id
+  total    Int @default(0)
+  n01      Int @default(0)
+  n02      Int @default(0)
+  n03      Int @default(0)
+  n04      Int @default(0)
+  n05      Int @default(0)
+  n06      Int @default(0)
+  n07      Int @default(0)
+  n08      Int @default(0)
+  n09      Int @default(0)
+  n10      Int @default(0)
+  n11      Int @default(0)
+  n12      Int @default(0)
+}
+
+model LotofacilLinhas {
+  id       Int @id @default(autoincrement())
+  concurso Int
+  linha    Int
+  n01      Int @default(0)
+  n02      Int @default(0)
+  n03      Int @default(0)
+  n04      Int @default(0)
+  n05      Int @default(0)
+  total    Int @default(0)
+
+  @@unique([concurso, linha])
+}
+
+model LotofacilCiclo {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloDuplo {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloTriplo {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloDuploNaoSaindo {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloTriploNaoSaindo {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  approved      Boolean   @default(false)
+  isAdmin       Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model LotofacilCicloLinha1 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloLinha2 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloLinha3 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloLinha4 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloLinha5 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloImpares {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloPares {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloColuna1 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloColuna2 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloColuna3 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloColuna4 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
+
+model LotofacilCicloColuna5 {
+  concurso Int @id
+  completo Boolean
+  numeros  String
+}
