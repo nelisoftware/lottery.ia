@@ -49,6 +49,8 @@ import { DateTime } from "luxon";
 import { NextResponse } from "next/server";
 import maintenanceLotoFacil from "./maintenance";
 
+export const preferredRegion = "gru1";
+
 export async function GET() {
   const url = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil";
   axios.defaults.httpsAgent = new https.Agent({

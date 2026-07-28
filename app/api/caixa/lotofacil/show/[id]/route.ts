@@ -7,6 +7,8 @@ type Params = {
   id: string;
 };
 
+export const preferredRegion = "gru1";
+
 export async function GET(req: Request, context: { params: Promise<Params> }) {
   // Garante que context.params seja tratado como um Promise
   const params = await Promise.resolve(context.params);
