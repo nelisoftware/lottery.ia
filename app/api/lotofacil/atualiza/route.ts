@@ -42,17 +42,19 @@ import {
   LotofacilImpares,
   LotofacilPares,
 } from "@prisma/client";
+import { caixaHeaders } from "@/libraries/db/caixaHeaders";
 import axios from "axios";
 import https from "https";
 import { DateTime } from "luxon";
 import { NextResponse } from "next/server";
 import maintenanceLotoFacil from "./maintenance";
 
-export async function GET() {  
+export async function GET() {
   const url = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil";
   axios.defaults.httpsAgent = new https.Agent({
     rejectUnauthorized: false,
   });
+  axios.defaults.headers.common = { ...axios.defaults.headers.common, ...caixaHeaders };
 
   // preparando ambientes bancos que são necessários ter dados perfeitos
   const maintenance = await maintenanceLotoFacil();
