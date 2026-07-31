@@ -11,7 +11,7 @@ export interface ResultadoFechamento {
   garantiaFormal: boolean;
 }
 
-function combinacoes<T>(lista: T[], tamanho: number): T[][] {
+export function combinacoes<T>(lista: T[], tamanho: number): T[][] {
   const resultado: T[][] = [];
   function combinar(inicio: number, atual: T[]) {
     if (atual.length === tamanho) {

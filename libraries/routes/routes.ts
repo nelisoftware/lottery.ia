@@ -11,4 +11,5 @@ export const constRoutes = {
   gerador: '/gerador',
   backtest: '/backtest',
   sequencias: '/sequencias',
+  duplasTernos: '/duplas-ternos',
 }
