@@ -18,7 +18,8 @@ export async function GET(req: Request, context: { params: Promise<Params> }) {
     return NextResponse.json({ error: 'ID is required' }, { status: 400 });
   }
 
-  const url = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/" + id;
+  // const url = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/" + id;  
+  const url = `https://loteriascaixa-api.herokuapp.com/api/lotofacil/${id}`;
 
   axios.defaults.httpsAgent = new https.Agent({
     rejectUnauthorized: false,
