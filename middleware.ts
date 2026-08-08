@@ -3,9 +3,18 @@ import { Route } from "@/libraries/routes";
 import { NextResponse } from "next/server";
 
 const ADMIN_ONLY_PATHS = [Route.link.users];
+const CRON_PATHS = [`/${Route.api.lotofacilUpdate}`];
 
 export default auth((req) => {
   const { nextUrl } = req;
+
+  if (CRON_PATHS.includes(nextUrl.pathname)) {
+    const authHeader = req.headers.get("authorization");
+    if (authHeader === `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.next();
+    }
+  }
+
   const session = req.auth;
   const isLoggedIn = Boolean(session?.user);
   const isApproved = Boolean(session?.user?.approved);

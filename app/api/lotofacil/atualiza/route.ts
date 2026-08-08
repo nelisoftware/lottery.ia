@@ -48,6 +48,7 @@ import { NextResponse } from "next/server";
 import maintenanceLotoFacil from "./maintenance";
 
 export const preferredRegion = "gru1";
+export const maxDuration = 60;
 
 export async function GET() {
   const url = "https://loteriascaixa-api.herokuapp.com/api/lotofacil";
