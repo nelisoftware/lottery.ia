@@ -7,6 +7,7 @@ type Params = {
 
 export async function GET(req: Request, context: { params: Promise<Params> }) {
   const params = await context.params;
+  console.error('agora entrei aqui');
   const { id } = params;
 
   if (!id) {
