@@ -42,9 +42,7 @@ import {
   LotofacilImpares,
   LotofacilPares,
 } from "@prisma/client";
-import { caixaHeaders } from "@/libraries/db/caixaHeaders";
 import axios from "axios";
-import https from "https";
 import { DateTime } from "luxon";
 import { NextResponse } from "next/server";
 import maintenanceLotoFacil from "./maintenance";
@@ -52,11 +50,7 @@ import maintenanceLotoFacil from "./maintenance";
 export const preferredRegion = "gru1";
 
 export async function GET() {
-  const url = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil";
-  axios.defaults.httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-  });
-  axios.defaults.headers.common = { ...axios.defaults.headers.common, ...caixaHeaders };
+  const url = "https://loteriascaixa-api.herokuapp.com/api/lotofacil";
 
   // preparando ambientes bancos que são necessários ter dados perfeitos
   const maintenance = await maintenanceLotoFacil();
@@ -65,13 +59,13 @@ export async function GET() {
   }
 
   try {
-    const data = await axios.get<LotofacilCaixa>(url).then(response => response.data);
+    const data = await axios.get<LotofacilCaixa>(url + "/latest").then(response => response.data);
     const lastConcurso = await prisma.lotofacil.findFirst({
       orderBy: {
         numero: "desc",
       },
     });
-    if (lastConcurso?.numero === data.numero) {
+    if (lastConcurso?.numero === data.concurso) {
       console.log("Sistema atualizado");
       return await NextResponse.json(lastConcurso);
     }
@@ -103,7 +97,7 @@ export async function GET() {
     let dataNumerosSaindo = await prisma.lotofacilNumeroSaindo.findMany({ orderBy: { numero: "asc" } });
     let dataNumerosNaoSaindo = await prisma.lotofacilNumeroNaoSaindo.findMany({ orderBy: { numero: "asc" } });
 
-    console.log("Atualizando até o concurso:", data.numero);
+    console.log("Atualizando até o concurso:", data.concurso);
 
     let storeCycle = "";
     let storeCycleDuo = "";
@@ -245,18 +239,18 @@ export async function GET() {
         storeCycleDuoWithout = dataStoreCycleDuoWithout?.numeros ?? "";
       }
     }
-    for (let i = (lastConcurso?.numero ?? 0) + 1; i <= data.numero; i++) {
+    for (let i = (lastConcurso?.numero ?? 0) + 1; i <= data.concurso; i++) {
       console.log("concurso:", i);
       let tries = 0;
       while (tries <= 5) {
         try {
           const { data } = await axios<LotofacilCaixa>(url + "/" + i, { timeout: 30000 });
           tries = 6;
-          const dezenas = data.listaDezenas.map(dezena => +dezena);
-          const dataConvertida = DateTime.fromFormat(data.dataApuracao, "dd/MM/yyyy").toISO();
+          const dezenas = data.dezenas.map(dezena => +dezena);
+          const dataConvertida = DateTime.fromFormat(data.data, "dd/MM/yyyy").toISO();
           const createLotofacil: CreateLotofacil = {
             dataApuracao: new Date(dataConvertida ?? "01/01/1980"),
-            numero: data.numero,
+            numero: data.concurso,
             bola01: dezenas[0],
             bola02: dezenas[1],
             bola03: dezenas[2],
@@ -272,7 +266,7 @@ export async function GET() {
             bola13: dezenas[12],
             bola14: dezenas[13],
             bola15: dezenas[14],
-            ganhadores: data.listaRateioPremio[0].numeroDeGanhadores,
+            ganhadores: data.premiacoes[0].ganhadores,
           };
           dataLotofacil.push(createLotofacil);
 
@@ -312,7 +306,7 @@ export async function GET() {
           });
 
           dataImpares.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             total: impares.length,
             n01: impares[0],
             n02: impares[1],
@@ -330,7 +324,7 @@ export async function GET() {
           });
 
           dataPares.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             total: pares.length,
             n01: pares[0],
             n02: pares[1],
@@ -347,7 +341,7 @@ export async function GET() {
           });
 
           dataLinhas.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             linha: 1,
             n01: linha1[0],
             n02: linha1[1],
@@ -358,7 +352,7 @@ export async function GET() {
           });
 
           dataLinhas.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             linha: 2,
             n01: linha2[0],
             n02: linha2[1],
@@ -369,7 +363,7 @@ export async function GET() {
           });
 
           dataLinhas.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             linha: 3,
             n01: linha3[0],
             n02: linha3[1],
@@ -380,7 +374,7 @@ export async function GET() {
           });
 
           dataLinhas.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             linha: 4,
             n01: linha4[0],
             n02: linha4[1],
@@ -391,7 +385,7 @@ export async function GET() {
           });
 
           dataLinhas.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             linha: 5,
             n01: linha5[0],
             n02: linha5[1],
@@ -403,69 +397,69 @@ export async function GET() {
 
           // # ciclos por conjunto fixo (simples, linhas, colunas, pares/ímpares)
           const resultadoCiclo = calcularCicloConjunto(SIMPLES, storeCycle, dezenas);
-          dataCiclo.push({ concurso: data.numero, completo: resultadoCiclo.completo, numeros: resultadoCiclo.numeros });
+          dataCiclo.push({ concurso: data.concurso, completo: resultadoCiclo.completo, numeros: resultadoCiclo.numeros });
           storeCycle = resultadoCiclo.numeros;
 
           const resultadoLinha1 = calcularCicloConjunto(LINHA1, storeCycleLine1, dezenas);
-          dataCicloLinha1.push({ concurso: data.numero, completo: resultadoLinha1.completo, numeros: resultadoLinha1.numeros });
+          dataCicloLinha1.push({ concurso: data.concurso, completo: resultadoLinha1.completo, numeros: resultadoLinha1.numeros });
           storeCycleLine1 = resultadoLinha1.numeros;
 
           const resultadoLinha2 = calcularCicloConjunto(LINHA2, storeCycleLine2, dezenas);
-          dataCicloLinha2.push({ concurso: data.numero, completo: resultadoLinha2.completo, numeros: resultadoLinha2.numeros });
+          dataCicloLinha2.push({ concurso: data.concurso, completo: resultadoLinha2.completo, numeros: resultadoLinha2.numeros });
           storeCycleLine2 = resultadoLinha2.numeros;
 
           const resultadoLinha3 = calcularCicloConjunto(LINHA3, storeCycleLine3, dezenas);
-          dataCicloLinha3.push({ concurso: data.numero, completo: resultadoLinha3.completo, numeros: resultadoLinha3.numeros });
+          dataCicloLinha3.push({ concurso: data.concurso, completo: resultadoLinha3.completo, numeros: resultadoLinha3.numeros });
           storeCycleLine3 = resultadoLinha3.numeros;
 
           const resultadoLinha4 = calcularCicloConjunto(LINHA4, storeCycleLine4, dezenas);
-          dataCicloLinha4.push({ concurso: data.numero, completo: resultadoLinha4.completo, numeros: resultadoLinha4.numeros });
+          dataCicloLinha4.push({ concurso: data.concurso, completo: resultadoLinha4.completo, numeros: resultadoLinha4.numeros });
           storeCycleLine4 = resultadoLinha4.numeros;
 
           const resultadoLinha5 = calcularCicloConjunto(LINHA5, storeCycleLine5, dezenas);
-          dataCicloLinha5.push({ concurso: data.numero, completo: resultadoLinha5.completo, numeros: resultadoLinha5.numeros });
+          dataCicloLinha5.push({ concurso: data.concurso, completo: resultadoLinha5.completo, numeros: resultadoLinha5.numeros });
           storeCycleLine5 = resultadoLinha5.numeros;
 
           const resultadoCol1 = calcularCicloConjunto(COLUNA1, storeCycleCol1, dezenas);
-          dataCicloCol1.push({ concurso: data.numero, completo: resultadoCol1.completo, numeros: resultadoCol1.numeros });
+          dataCicloCol1.push({ concurso: data.concurso, completo: resultadoCol1.completo, numeros: resultadoCol1.numeros });
           storeCycleCol1 = resultadoCol1.numeros;
 
           const resultadoCol2 = calcularCicloConjunto(COLUNA2, storeCycleCol2, dezenas);
-          dataCicloCol2.push({ concurso: data.numero, completo: resultadoCol2.completo, numeros: resultadoCol2.numeros });
+          dataCicloCol2.push({ concurso: data.concurso, completo: resultadoCol2.completo, numeros: resultadoCol2.numeros });
           storeCycleCol2 = resultadoCol2.numeros;
 
           const resultadoCol3 = calcularCicloConjunto(COLUNA3, storeCycleCol3, dezenas);
-          dataCicloCol3.push({ concurso: data.numero, completo: resultadoCol3.completo, numeros: resultadoCol3.numeros });
+          dataCicloCol3.push({ concurso: data.concurso, completo: resultadoCol3.completo, numeros: resultadoCol3.numeros });
           storeCycleCol3 = resultadoCol3.numeros;
 
           const resultadoCol4 = calcularCicloConjunto(COLUNA4, storeCycleCol4, dezenas);
-          dataCicloCol4.push({ concurso: data.numero, completo: resultadoCol4.completo, numeros: resultadoCol4.numeros });
+          dataCicloCol4.push({ concurso: data.concurso, completo: resultadoCol4.completo, numeros: resultadoCol4.numeros });
           storeCycleCol4 = resultadoCol4.numeros;
 
           const resultadoCol5 = calcularCicloConjunto(COLUNA5, storeCycleCol5, dezenas);
-          dataCicloCol5.push({ concurso: data.numero, completo: resultadoCol5.completo, numeros: resultadoCol5.numeros });
+          dataCicloCol5.push({ concurso: data.concurso, completo: resultadoCol5.completo, numeros: resultadoCol5.numeros });
           storeCycleCol5 = resultadoCol5.numeros;
 
           const resultadoPar = calcularCicloConjunto(PARES, storeCyclePar, dezenas);
-          dataCicloPar.push({ concurso: data.numero, completo: resultadoPar.completo, numeros: resultadoPar.numeros });
+          dataCicloPar.push({ concurso: data.concurso, completo: resultadoPar.completo, numeros: resultadoPar.numeros });
           storeCyclePar = resultadoPar.numeros;
 
           const resultadoImpar = calcularCicloConjunto(IMPARES, storeCycleImpar, dezenas);
-          dataCicloImpar.push({ concurso: data.numero, completo: resultadoImpar.completo, numeros: resultadoImpar.numeros });
+          dataCicloImpar.push({ concurso: data.concurso, completo: resultadoImpar.completo, numeros: resultadoImpar.numeros });
           storeCycleImpar = resultadoImpar.numeros;
 
           // ## ciclos de duplas/triplas adjacentes (e suas variantes "não saindo")
           const resultadoDuplo = calcularCicloDuplo(storeCycleDuo, dezenas);
-          dataCicloDuplo.push({ concurso: data.numero, completo: resultadoDuplo.completo, numeros: resultadoDuplo.numeros });
+          dataCicloDuplo.push({ concurso: data.concurso, completo: resultadoDuplo.completo, numeros: resultadoDuplo.numeros });
           storeCycleDuo = resultadoDuplo.numeros;
 
           const resultadoTriplo = calcularCicloTriplo(storeCycleTriple, dezenas);
-          dataCicloTriplo.push({ concurso: data.numero, completo: resultadoTriplo.completo, numeros: resultadoTriplo.numeros });
+          dataCicloTriplo.push({ concurso: data.concurso, completo: resultadoTriplo.completo, numeros: resultadoTriplo.numeros });
           storeCycleTriple = resultadoTriplo.numeros;
 
           const resultadoDuploNaoSaindo = calcularCicloDuploNaoSaindo(storeCycleDuoWithout, dezenas);
           dataCicloDuploNaoSaindo.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             completo: resultadoDuploNaoSaindo.completo,
             numeros: resultadoDuploNaoSaindo.numeros,
           });
@@ -473,7 +467,7 @@ export async function GET() {
 
           const resultadoTriploNaoSaindo = calcularCicloTriploNaoSaindo(storeCycleTripleWithout, dezenas);
           dataCicloTriploNaoSaindo.push({
-            concurso: data.numero,
+            concurso: data.concurso,
             completo: resultadoTriploNaoSaindo.completo,
             numeros: resultadoTriploNaoSaindo.numeros,
           });

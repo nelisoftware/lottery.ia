@@ -1,17 +1,16 @@
 import { Prisma } from "@prisma/client";
 
 export type LotofacilCaixa = {
-  dataApuracao: string;
-  acumulado: boolean;
-  numero: number;
-  listaDezenas: string[];
-  listaRateioPremio: ListaRateioPremio[];
+  concurso: number;
+  data: string;
+  dezenas: string[];
+  premiacoes: Premiacao[];
 };
 
-type ListaRateioPremio = {
-  descricaoFaixa: string;
+type Premiacao = {
+  descricao: string;
   faixa: number;
-  numeroDeGanhadores: number;
+  ganhadores: number;
   valorPremio: number;
 };
 

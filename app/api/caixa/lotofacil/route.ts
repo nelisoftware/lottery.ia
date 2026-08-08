@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export const preferredRegion = "gru1";
 
 export async function GET() {
-  console.error('fiz aqui primeiro');
   const url = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil";
   axios.defaults.httpsAgent = new https.Agent({
     rejectUnauthorized: false
