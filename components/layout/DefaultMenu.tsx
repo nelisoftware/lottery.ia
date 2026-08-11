@@ -23,9 +23,9 @@ export function DefaultMenu() {
       <DefaultItemMenu nameLink="Duplas e Ternos" href={Route.link.duplasTernos} icon={<Icons.tabler.Grid {...iconProps} />} />
       <DefaultItemMenu nameLink="Ciclos" href={Route.link.cycles} icon={<Icons.tabler.Circles {...iconProps} />} />
       <DefaultItemMenu nameLink="Ciclos Não Marcar" href={Route.link.nocycles} icon={<Icons.tabler.InfinityOff {...iconProps} />} />
-      <DefaultItemMenu nameLink="Atualizar" href={Route.link.update} icon={<Icons.tabler.Refresh {...iconProps} />} />
       {session?.user?.isAdmin && (
         <DefaultSubMenu nameLink="Configurações" icon={<Icons.tabler.Settings {...iconProps} />}>
+          <DefaultItemMenu nameLink="Atualizar" href={Route.link.update} icon={<Icons.tabler.Refresh {...iconProps} />} />
           <DefaultItemMenu nameLink="Usuários" href={Route.link.users} icon={<Icons.tabler.User {...iconProps} />} />
         </DefaultSubMenu>
       )}
