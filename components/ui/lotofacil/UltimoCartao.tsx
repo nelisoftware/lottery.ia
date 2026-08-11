@@ -53,7 +53,7 @@ export default function UltimoCartao() {
       <Card.Footer>
         <p> Data:
           <span className="text-purple-950 dark:text-gray-500 font-light pl-2">
-            {DateTime.fromJSDate(new Date(data.dataApuracao)).toFormat('dd/MM/yyyy')}
+            {DateTime.fromJSDate(new Date(data.dataApuracao), { zone: 'utc' }).toFormat('dd/MM/yyyy')}
           </span>
         </p>
       </Card.Footer>

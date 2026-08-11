@@ -248,7 +248,7 @@ export async function GET() {
           const { data } = await axios<LotofacilCaixa>(url + "/" + i, { timeout: 30000 });
           tries = 6;
           const dezenas = data.dezenas.map(dezena => +dezena);
-          const dataConvertida = DateTime.fromFormat(data.data, "dd/MM/yyyy").toISO();
+          const dataConvertida = DateTime.fromFormat(data.data, "dd/MM/yyyy", { zone: "utc" }).toISO();
           const createLotofacil: CreateLotofacil = {
             dataApuracao: new Date(dataConvertida ?? "01/01/1980"),
             numero: data.concurso,

@@ -18,7 +18,7 @@ export function conferirHistorico(cartao: number[], historico: Lotofacil[]): His
     const hits = calcularAcertos(cartao, extrairBolas(result));
     return {
       concurso: result.numero,
-      date: DateTime.fromJSDate(new Date(result.dataApuracao)).toFormat("dd/MM/yyyy"),
+      date: DateTime.fromJSDate(new Date(result.dataApuracao), { zone: "utc" }).toFormat("dd/MM/yyyy"),
       hits,
       prizeLevel: hits >= 11 ? hits : null,
     };

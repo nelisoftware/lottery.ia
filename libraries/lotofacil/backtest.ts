@@ -112,7 +112,7 @@ export function backtestMetodoDinamico(
       const hits = calcularAcertos(cartao, sorteio);
       detalhes.push({
         concurso: concurso.numero,
-        date: DateTime.fromJSDate(new Date(concurso.dataApuracao)).toFormat("dd/MM/yyyy"),
+        date: DateTime.fromJSDate(new Date(concurso.dataApuracao), { zone: "utc" }).toFormat("dd/MM/yyyy"),
         hits,
         prizeLevel: hits >= 11 ? hits : null,
       });
