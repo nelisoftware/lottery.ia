@@ -1,6 +1,7 @@
 'use client';
 
 import { poppins } from '@/styles/fonts';
+import { usePathname } from 'next/navigation';
 import React from "react";
 import DefaultLogo from "./DefaultLogo";
 import { DefaultMenu } from "./DefaultMenu";
@@ -10,12 +11,18 @@ import { Icons } from '@/libraries/icons';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   const menuRef = React.useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const onClickMenuMobile = React.useCallback(() => {
     if (!menuRef.current) return;
     menuRef.current?.classList.toggle('hidden');
 
   }, [menuRef]);
+
+  // Fecha o menu mobile automaticamente após navegar para uma nova rota.
+  React.useEffect(() => {
+    menuRef.current?.classList.add('hidden');
+  }, [pathname]);
 
 
   React.useEffect(() => {

@@ -6,6 +6,7 @@ import { Route } from "@/libraries/routes";
 import { Lotofacil } from "@prisma/client";
 import { useMemo, useState } from "react";
 import Input from "../inputs/Input";
+import GradeNumeros from "./GradeNumeros";
 
 type UltimosConcursosProps = {
   className?: string;
@@ -58,7 +59,65 @@ export default function UltimosConcursos({
         onChange={(e) => setShow(+e.currentTarget.value)}
         className="w-24"
       />
-      <div className={`overflow-x-auto rounded-lg shadow ${className}`}>
+      {/* Mobile: um card por concurso, sem scroll horizontal */}
+      <div className="lg:hidden flex flex-col gap-3 w-full">
+        {resultConcursos.map((concurso, index) => {
+          const repeated = repeatCounts[index];
+          return (
+            <div
+              key={index}
+              className="rounded-lg border border-gray-200 dark:border-gray-800 p-3"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-semibold">Concurso {concurso.numero}</span>
+                {repeated !== null && (
+                  <span
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-md font-semibold text-xs"
+                    style={repeatBadgeStyle(repeated)}
+                    title="Números repetidos em relação ao concurso anterior"
+                  >
+                    {repeated}
+                  </span>
+                )}
+              </div>
+              <GradeNumeros sorteados={concurso.bolas} />
+            </div>
+          );
+        })}
+
+        <h3 className="font-semibold mt-2">Por número</h3>
+        <div className="overflow-hidden rounded-lg shadow">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-sky-950 dark:bg-sky-800 text-sky-100 text-center">
+                <th className="py-1.5 font-normal">Número</th>
+                <th className="py-1.5 font-normal">Total</th>
+                <th className="py-1.5 font-normal" title="Maior sequência de concursos seguidos em que o número saiu">Máx. seq.</th>
+                <th className="py-1.5 font-normal" title="Maior sequência de concursos seguidos em que o número NÃO saiu">Máx. aus.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 25 }, (_, i) => i + 1).map((numero) => {
+                const total = resultConcursos.reduce(
+                  (acc, cur) => acc + (cur.map[numero] ? 1 : 0),
+                  0
+                );
+                return (
+                  <tr key={numero} className="text-center border-t border-gray-100 dark:border-gray-800">
+                    <td className="py-1.5 font-mono">{numero < 10 ? "0" + numero : numero}</td>
+                    <td className="py-1.5">{total}</td>
+                    <td className="py-1.5">{maxAppearances[numero]}</td>
+                    <td className="py-1.5">{maxAbsences[numero]}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Desktop: matriz completa concurso x número */}
+      <div className={`hidden lg:block overflow-x-auto rounded-lg shadow ${className}`}>
         <table
           id="table"
           className="text-sm bg-transparent border-separate border-spacing-0 table-fixed"
