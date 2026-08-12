@@ -104,7 +104,7 @@ export default function UltimosConcursos({
                       <span className="text-slate-400">&mdash;</span>
                     ) : (
                       <span
-                        className="inline-flex items-center justify-center w-6 h-6 rounded-full font-semibold text-xs"
+                        className="inline-flex items-center justify-center w-6 h-6 rounded-md font-semibold text-xs"
                         style={repeatBadgeStyle(repeated)}
                       >
                         {repeated}

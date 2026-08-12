@@ -12,7 +12,7 @@ export default function NumberPicker({
   latestNumbers = [],
 }: NumberPickerProps) {
   const getButtonClass = (number: number): string => {
-    const base = 'w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold ';
+    const base = 'w-12 h-12 rounded-md flex items-center justify-center text-lg font-bold ';
     const selected = selectedNumbers.includes(number);
     const drawn = latestNumbers.includes(number);
 

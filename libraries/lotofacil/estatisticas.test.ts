@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calcularEstatisticas } from "./estatisticas";
+import { calcularEstatisticas, percentil } from "./estatisticas";
 import { Lotofacil } from "@prisma/client";
 
 function criarSorteio(numero: number, bolas: number[]): Lotofacil {
@@ -46,5 +46,34 @@ describe("calcularEstatisticas", () => {
     expect(resultado.repetidosAnteriorMin).toBe(5);
     expect(resultado.repetidosAnteriorMax).toBe(10);
     expect(resultado.repetidosAnteriorMedia).toBe(7.5);
+  });
+
+  it("calcula moldura, primos, múltiplos e fibonaccis do histórico", () => {
+    const bolas = [1, 3, 4, 5, 8, 9, 11, 12, 13, 14, 17, 18, 20, 24, 25];
+    const resultado = calcularEstatisticas([criarSorteio(1, bolas)]);
+
+    expect(resultado.molduraMedia).toBe(8);
+    expect(resultado.primosMedia).toBe(5);
+    expect(resultado.multiplosMedia).toBe(5);
+    expect(resultado.fibonacciMedia).toBe(5);
+    expect(resultado.somaP10).toBe(184);
+    expect(resultado.somaP90).toBe(184);
+  });
+});
+
+describe("percentil", () => {
+  it("retorna 0 para lista vazia", () => {
+    expect(percentil([], 50)).toBe(0);
+  });
+
+  it("retorna o próprio valor quando há um único elemento", () => {
+    expect(percentil([42], 10)).toBe(42);
+  });
+
+  it("interpola linearmente entre os valores ordenados", () => {
+    const valores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    expect(percentil(valores, 0)).toBe(1);
+    expect(percentil(valores, 100)).toBe(10);
+    expect(percentil(valores, 50)).toBeCloseTo(5.5);
   });
 });

@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { contarImpares, contarPares, extrairBolas, soma } from "./numeros";
+import {
+  contarFibonacci,
+  contarImpares,
+  contarMoldura,
+  contarMultiplos,
+  contarPares,
+  contarPrimos,
+  extrairBolas,
+  soma,
+} from "./numeros";
 import { Lotofacil } from "@prisma/client";
 
 function criarSorteio(bolas: number[]): Lotofacil {
@@ -37,5 +46,29 @@ describe("soma", () => {
 
   it("retorna 0 para lista vazia", () => {
     expect(soma([])).toBe(0);
+  });
+});
+
+describe("contarMoldura/contarPrimos/contarMultiplos/contarFibonacci", () => {
+  // Concurso 3758: 01,03,04,05,08,09,11,12,13,14,17,18,20,24,25
+  const concurso3758 = [1, 3, 4, 5, 8, 9, 11, 12, 13, 14, 17, 18, 20, 24, 25];
+
+  it("bate com os valores conferidos do concurso 3758", () => {
+    expect(contarMoldura(concurso3758)).toBe(8);
+    expect(contarPrimos(concurso3758)).toBe(5);
+    expect(contarMultiplos(concurso3758)).toBe(5);
+    expect(contarFibonacci(concurso3758)).toBe(5);
+    expect(soma(concurso3758)).toBe(184);
+  });
+
+  it("retorna 0 para lista vazia", () => {
+    expect(contarMoldura([])).toBe(0);
+    expect(contarPrimos([])).toBe(0);
+    expect(contarMultiplos([])).toBe(0);
+    expect(contarFibonacci([])).toBe(0);
+  });
+
+  it("aceita uma base diferente para múltiplos", () => {
+    expect(contarMultiplos([2, 4, 5, 8, 10], 5)).toBe(2);
   });
 });

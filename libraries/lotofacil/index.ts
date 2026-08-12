@@ -1,4 +1,15 @@
-import { extrairBolas, contarPares, contarImpares, contarMaxConsecutivos, soma } from "./numeros";
+import {
+  extrairBolas,
+  contarPares,
+  contarImpares,
+  contarMaxConsecutivos,
+  contarMoldura,
+  contarPrimos,
+  contarMultiplos,
+  contarFibonacci,
+  contarRepetidos,
+  soma,
+} from "./numeros";
 import { calcularAcertos, conferirHistorico } from "./conferencia";
 import {
   calcularCicloConjunto,
@@ -7,7 +18,8 @@ import {
   calcularCicloDuploNaoSaindo,
   calcularCicloTriploNaoSaindo,
 } from "./ciclos";
-import { calcularEstatisticas } from "./estatisticas";
+import { calcularEstatisticas, percentil } from "./estatisticas";
+import { avaliarParametrosConcurso } from "./parametros";
 import { calcularSequenciasPorNumero } from "./sequencias";
 import { gerarCartao, gerarCartoes } from "./gerador";
 import { gerarFechamento } from "./fechamento";
@@ -19,6 +31,11 @@ export const lotofacil = {
   contarPares,
   contarImpares,
   contarMaxConsecutivos,
+  contarMoldura,
+  contarPrimos,
+  contarMultiplos,
+  contarFibonacci,
+  contarRepetidos,
   soma,
   calcularAcertos,
   conferirHistorico,
@@ -28,6 +45,8 @@ export const lotofacil = {
   calcularCicloDuploNaoSaindo,
   calcularCicloTriploNaoSaindo,
   calcularEstatisticas,
+  percentil,
+  avaliarParametrosConcurso,
   calcularSequenciasPorNumero,
   gerarCartao,
   gerarCartoes,
@@ -40,6 +59,7 @@ export const lotofacil = {
 export type { HistoricalAnalysisItem } from "./conferencia";
 export type { EstadoCiclo } from "./ciclos";
 export type { EstatisticasHistoricas } from "./estatisticas";
+export type { StatusParametro, ParametroConcurso } from "./parametros";
 export type { SequenciaNumero, StatusSequencia } from "./sequencias";
 export type { FiltrosGerador, CartaoGerado } from "./gerador";
 export type { ResultadoFechamento } from "./fechamento";
