@@ -16,6 +16,7 @@ export function DefaultMenu() {
     <>
       <DefaultItemMenu nameLink="Dashboard" href={Route.link.home} icon={<Icons.tabler.Home {...iconProps} />} />
       <DefaultItemMenu nameLink="Sequências" href={Route.link.sequencias} icon={<Icons.tabler.ChartBar {...iconProps} />} />
+      <DefaultItemMenu nameLink="Linhas" href={Route.link.linhas} icon={<Icons.tabler.Rows {...iconProps} />} />
       <DefaultItemMenu nameLink="Ciclos" href={Route.link.cycles} icon={<Icons.tabler.Circles {...iconProps} />} />
       <DefaultItemMenu nameLink="Ciclos Não Marcar" href={Route.link.nocycles} icon={<Icons.tabler.InfinityOff {...iconProps} />} />
       <DefaultItemMenu nameLink="Duplas e Ternos" href={Route.link.duplasTernos} icon={<Icons.tabler.Grid {...iconProps} />} />

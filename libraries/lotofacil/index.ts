@@ -21,6 +21,7 @@ import {
 import { calcularEstatisticas, percentil } from "./estatisticas";
 import { avaliarParametrosConcurso } from "./parametros";
 import { calcularSequenciasPorNumero } from "./sequencias";
+import { calcularEstatisticasLinhas, LINHAS } from "./linhas";
 import { gerarCartao, gerarCartoes } from "./gerador";
 import { gerarFechamento } from "./fechamento";
 import { backtestCartela, backtestMetodoDinamico } from "./backtest";
@@ -48,6 +49,8 @@ export const lotofacil = {
   percentil,
   avaliarParametrosConcurso,
   calcularSequenciasPorNumero,
+  calcularEstatisticasLinhas,
+  LINHAS,
   gerarCartao,
   gerarCartoes,
   gerarFechamento,
@@ -61,6 +64,7 @@ export type { EstadoCiclo } from "./ciclos";
 export type { EstatisticasHistoricas } from "./estatisticas";
 export type { StatusParametro, ParametroConcurso } from "./parametros";
 export type { SequenciaNumero, StatusSequencia } from "./sequencias";
+export type { EstatisticaNumeroLinha } from "./linhas";
 export type { FiltrosGerador, CartaoGerado } from "./gerador";
 export type { ResultadoFechamento } from "./fechamento";
 export type { ResultadoBacktest, ResumoBacktest, MetodoDinamico } from "./backtest";

@@ -12,4 +12,5 @@ export const constRoutes = {
   backtest: '/backtest',
   sequencias: '/sequencias',
   duplasTernos: '/duplas-ternos',
+  linhas: '/linhas',
 }
