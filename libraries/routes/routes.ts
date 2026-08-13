@@ -13,4 +13,5 @@ export const constRoutes = {
   sequencias: '/sequencias',
   duplasTernos: '/duplas-ternos',
   linhas: '/linhas',
+  paresImpares: '/pares-impares',
 }
