@@ -8,6 +8,7 @@ import { Route } from "@/libraries/routes";
 import { Lotofacil } from "@prisma/client";
 import { useMemo } from "react";
 import { Card } from "../card";
+import ParametrosTable from "./ParametrosTable";
 
 export default function ParametrosConcurso() {
   const { data: historico, isFetching, error } = db.Get<Lotofacil[]>(Route.api.lotofacil);
@@ -47,31 +48,7 @@ export default function ParametrosConcurso() {
     <Card.Root className="w-full sm:w-80">
       <Card.Title title="Parâmetros do Concurso" icon={<Icons.tabler.ArtBoard />} />
       <Card.Content>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-500 dark:text-gray-400">
-              <th className="py-1 font-normal">Parametro</th>
-              <th className="py-1 font-normal">Qtd</th>
-              <th className="py-1 font-normal">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {parametros.map((parametro) => (
-              <tr key={parametro.nome} className="border-t border-gray-100 dark:border-gray-800">
-                <td className="py-2">{parametro.nome}</td>
-                <td className="py-2">{parametro.valor}</td>
-                <td className="py-2">
-                  <span
-                    className={`inline-block rounded-full px-3 py-1 text-xs font-medium text-white ${parametro.status === 'padrao' ? 'bg-green-600' : 'bg-red-600'
-                      }`}
-                  >
-                    {parametro.status === 'padrao' ? 'Padrão' : 'Fora do padrão'}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ParametrosTable parametros={parametros} />
       </Card.Content>
     </Card.Root>
   );

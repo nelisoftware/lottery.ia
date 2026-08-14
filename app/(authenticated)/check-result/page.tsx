@@ -3,6 +3,7 @@ import ErrorWaring from "@/components/misc/ErrorWarning";
 import LoadingData from "@/components/misc/LoadingData";
 import LotofacilAnalysis from "@/components/ui/lotofacil/LotofacilAnalysis";
 import NumberPicker from "@/components/ui/lotofacil/NumberPicker";
+import ParametrosSelecao from "@/components/ui/lotofacil/ParametrosSelecao";
 import { db } from "@/libraries/db";
 import { lotofacil } from "@/libraries/lotofacil";
 import { Route } from "@/libraries/routes";
@@ -99,8 +100,9 @@ export default function CheckResultPage() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-4">
         {content}
+        <ParametrosSelecao selecionados={selectedNumbers} historico={lastResults} />
       </div>
       {toAnalyze && <LotofacilAnalysis cartao={selectedNumbers} results={lastResults} />}
     </div>
