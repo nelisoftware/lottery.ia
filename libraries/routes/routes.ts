@@ -14,4 +14,5 @@ export const constRoutes = {
   duplasTernos: '/duplas-ternos',
   linhas: '/linhas',
   paresImpares: '/pares-impares',
+  intervalos: '/intervalos',
 }

@@ -27,6 +27,7 @@ import { gerarFechamento } from "./fechamento";
 import { backtestCartela, backtestMetodoDinamico } from "./backtest";
 import { calcularFrequenciaCombinacoes } from "./combinacoes";
 import { calcularEstatisticasParesImpares } from "./paresImpares";
+import { encontrarIntervalosFaltantes, calcularEstatisticasIntervalos } from "./intervalos";
 
 export const lotofacil = {
   extrairBolas,
@@ -59,6 +60,8 @@ export const lotofacil = {
   backtestMetodoDinamico,
   calcularFrequenciaCombinacoes,
   calcularEstatisticasParesImpares,
+  encontrarIntervalosFaltantes,
+  calcularEstatisticasIntervalos,
 };
 
 export type { HistoricalAnalysisItem } from "./conferencia";
@@ -72,4 +75,5 @@ export type { ResultadoFechamento } from "./fechamento";
 export type { ResultadoBacktest, ResumoBacktest, MetodoDinamico } from "./backtest";
 export type { CombinacaoFrequencia } from "./combinacoes";
 export type { EstatisticaParesImpares } from "./paresImpares";
+export type { IntervaloFaltante, EstatisticaIntervalo } from "./intervalos";
 export * as ciclos from "./ciclos";
