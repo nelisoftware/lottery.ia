@@ -22,6 +22,7 @@ export function DefaultMenu() {
       <DefaultItemMenu nameLink="Duplas e Ternos" href={Route.link.duplasTernos} icon={<Icons.tabler.Grid {...iconProps} />} />
       <DefaultItemMenu nameLink="Pares e Ímpares" href={Route.link.paresImpares} icon={<Icons.tabler.Scale {...iconProps} />} />
       <DefaultItemMenu nameLink="Intervalos" href={Route.link.intervalos} icon={<Icons.tabler.AlertTriangle {...iconProps} />} />
+      <DefaultItemMenu nameLink="Escalonamento" href={Route.link.escalonamento} icon={<Icons.tabler.Stairs {...iconProps} />} />
       <DefaultItemMenu nameLink="Últimos sorteios" href={Route.link.latestDraws} icon={<Icons.tabler.List {...iconProps} />} />
       <DefaultItemMenu nameLink="Conferir Cartão" href={Route.link.checkResults} icon={<Icons.tabler.Checkbox {...iconProps} />} />
       <DefaultItemMenu nameLink="Gerador de Jogos" href={Route.link.gerador} icon={<Icons.tabler.Dice {...iconProps} />} />

@@ -15,4 +15,5 @@ export const constRoutes = {
   linhas: '/linhas',
   paresImpares: '/pares-impares',
   intervalos: '/intervalos',
+  escalonamento: '/escalonamento',
 }
