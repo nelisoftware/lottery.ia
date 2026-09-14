@@ -49,6 +49,7 @@ export default function GeradorPage() {
   }, [filtrosAtivos]);
 
   const [poolFechamento, setPoolFechamento] = useState<number[]>([]);
+  const [tamanhoCartelaFechamento, setTamanhoCartelaFechamento] = useState(15);
   const [resultadoFechamento, setResultadoFechamento] = useState<ResultadoFechamento | null>(null);
 
   const toggleFechamento = useCallback((numero: number) => {
@@ -57,8 +58,8 @@ export default function GeradorPage() {
   }, []);
 
   const gerarFechamento = useCallback(() => {
-    setResultadoFechamento(lotofacil.gerarFechamento(poolFechamento, 15));
-  }, [poolFechamento]);
+    setResultadoFechamento(lotofacil.gerarFechamento(poolFechamento, tamanhoCartelaFechamento));
+  }, [poolFechamento, tamanhoCartelaFechamento]);
 
   return (
     <div className="p-4 flex flex-col gap-6 max-w-4xl">
@@ -157,15 +158,25 @@ export default function GeradorPage() {
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold mb-2">Fechamento</h2>
         <p className="text-sm text-gray-600 mb-4">
-          Escolha um pool de números (mínimo 15). Até 20 números geramos todas as combinações possíveis
-          (garantia matemática formal); acima disso usamos uma heurística de cobertura de pares, sem garantia formal.
+          Escolha um pool de números (mínimo igual ao tamanho do cartão). Até 20 números geramos todas as combinações
+          possíveis (garantia matemática formal); acima disso usamos uma heurística de cobertura de pares, sem garantia formal.
         </p>
         <NumberPicker selectedNumbers={poolFechamento} onToggle={toggleFechamento} />
         <p className="text-sm text-gray-700 mb-4">Selecionados: {poolFechamento.length}</p>
+        <label className="flex flex-col text-sm text-gray-700 mb-4 max-w-xs">
+          Tamanho do cartão
+          <select
+            className="border rounded px-2 py-1 mt-1"
+            value={tamanhoCartelaFechamento}
+            onChange={e => { setResultadoFechamento(null); setTamanhoCartelaFechamento(+e.target.value); }}
+          >
+            {Array.from({ length: 6 }, (_, i) => 15 + i).map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </label>
         <button
           onClick={gerarFechamento}
-          disabled={poolFechamento.length < 15}
-          className={`px-4 py-2 rounded ${poolFechamento.length >= 15 ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+          disabled={poolFechamento.length < tamanhoCartelaFechamento}
+          className={`px-4 py-2 rounded ${poolFechamento.length >= tamanhoCartelaFechamento ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
         >
           Gerar fechamento
         </button>

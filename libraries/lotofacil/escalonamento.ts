@@ -22,7 +22,7 @@ function embaralhar<T>(lista: T[]): T[] {
   return copia;
 }
 
-function sortearCartelasUnicas(pool: number[], tamanho: number, quantidade: number, tentativasMax = 500): number[][] {
+export function sortearCartelasUnicas(pool: number[], tamanho: number, quantidade: number, tentativasMax = 500): number[][] {
   const vistos = new Set<string>();
   const cartelas: number[][] = [];
   for (let tentativa = 0; tentativa < tentativasMax && cartelas.length < quantidade; tentativa++) {

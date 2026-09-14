@@ -29,6 +29,7 @@ import { calcularFrequenciaCombinacoes } from "./combinacoes";
 import { calcularEstatisticasParesImpares } from "./paresImpares";
 import { encontrarIntervalosFaltantes, calcularEstatisticasIntervalos } from "./intervalos";
 import { gerarEscalonamento } from "./escalonamento";
+import { gerarSorteioAleatorio } from "./sorteioAleatorio";
 
 export const lotofacil = {
   extrairBolas,
@@ -64,6 +65,7 @@ export const lotofacil = {
   encontrarIntervalosFaltantes,
   calcularEstatisticasIntervalos,
   gerarEscalonamento,
+  gerarSorteioAleatorio,
 };
 
 export type { HistoricalAnalysisItem } from "./conferencia";
@@ -79,4 +81,5 @@ export type { CombinacaoFrequencia } from "./combinacoes";
 export type { EstatisticaParesImpares } from "./paresImpares";
 export type { IntervaloFaltante, EstatisticaIntervalo } from "./intervalos";
 export type { IntervaloEscalonado, ResultadoEscalonamento } from "./escalonamento";
+export type { ResultadoSorteioAleatorio } from "./sorteioAleatorio";
 export * as ciclos from "./ciclos";

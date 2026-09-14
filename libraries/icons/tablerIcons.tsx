@@ -1,4 +1,4 @@
-import { Icon360, IconAdjustmentsHorizontal, IconAlertTriangle, IconArtboard, IconBrandGoogle, IconBrightnessUp, IconChartBar, IconCheck, IconCheckbox, IconChevronDown, IconChevronUp, IconCircles, IconClockPause, IconCopy, IconDice5, IconHistory, IconHome, IconInfinityOff, IconKey, IconLayoutGrid, IconLayoutNavbarExpand, IconLayoutRows, IconList, IconListCheck, IconLockOpen, IconLogout, IconMenu, IconMenu2, IconMoonFilled, IconNumbers, IconPlus, IconRefresh, IconRepeatOnce, IconScale, IconSearch, IconSettings, IconStairsUp, IconTrash, IconUser, IconUsersPlus } from '@tabler/icons-react';
+import { Icon360, IconAdjustmentsHorizontal, IconAlertTriangle, IconArrowsShuffle, IconArtboard, IconBrandGoogle, IconBrightnessUp, IconChartBar, IconCheck, IconCheckbox, IconChevronDown, IconChevronUp, IconCircles, IconClockPause, IconCopy, IconDice5, IconHistory, IconHome, IconInfinityOff, IconKey, IconLayoutGrid, IconLayoutNavbarExpand, IconLayoutRows, IconList, IconListCheck, IconLockOpen, IconLogout, IconMenu, IconMenu2, IconMoonFilled, IconNumbers, IconPlus, IconRefresh, IconRepeatOnce, IconScale, IconSearch, IconSettings, IconStairsUp, IconTrash, IconUser, IconUsersPlus } from '@tabler/icons-react';
 
 type Props = {
   size?: number,
@@ -60,6 +60,7 @@ export module TablerIcons {
 
   export const Search = (props: Props) => <IconSearch {...props} />
   export const Settings = (props: Props) => <IconSettings {...props} />
+  export const Shuffle = (props: Props) => <IconArrowsShuffle {...props} />
   export const Stairs = (props: Props) => <IconStairsUp {...props} />
   export const Trash = (props: Props) => <IconTrash {...props} />
 

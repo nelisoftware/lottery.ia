@@ -16,4 +16,5 @@ export const constRoutes = {
   paresImpares: '/pares-impares',
   intervalos: '/intervalos',
   escalonamento: '/escalonamento',
+  sorteio: '/sorteio',
 }
