@@ -13,6 +13,7 @@ export default function SorteioPage() {
   const [resultado, setResultado] = useState<ResultadoSorteioAleatorio | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [copiado, setCopiado] = useState(false);
+  const [copiadoIndex, setCopiadoIndex] = useState<number | null>(null);
 
   const togglePool = useCallback((numero: number) => {
     setResultado(null);
@@ -29,18 +30,25 @@ export default function SorteioPage() {
     }
   }, [pool, tamanhoCartela, quantidade]);
 
+  const formatarCartela = (cartela: number[], index: number) => {
+    const linhas: string[] = [];
+    for (let i = 0; i < cartela.length; i += 5) {
+      linhas.push(cartela.slice(i, i + 5).map(n => String(n).padStart(2, '0')).join(' '));
+    }
+    return [`Cartão ${index + 1}`, linhas.join('\n')].join('\n');
+  };
+
   const copiarTudo = async () => {
     if (!resultado) return;
-    const blocos = resultado.cartelas.map((cartela, index) => {
-      const linhas: string[] = [];
-      for (let i = 0; i < cartela.length; i += 5) {
-        linhas.push(cartela.slice(i, i + 5).map(n => String(n).padStart(2, '0')).join(' '));
-      }
-      return [`Cartão ${index + 1}`, linhas.join('\n')].join('\n');
-    });
-    await navigator.clipboard.writeText(blocos.join('\n\n'));
+    await navigator.clipboard.writeText(resultado.cartelas.map(formatarCartela).join('\n\n'));
     setCopiado(true);
     setTimeout(() => setCopiado(false), 2000);
+  };
+
+  const copiarCartela = async (cartela: number[], index: number) => {
+    await navigator.clipboard.writeText(formatarCartela(cartela, index));
+    setCopiadoIndex(index);
+    setTimeout(() => setCopiadoIndex(atual => atual === index ? null : atual), 2000);
   };
 
   return (
@@ -61,8 +69,8 @@ export default function SorteioPage() {
         </p>
         <NumberPicker selectedNumbers={pool} onToggle={togglePool} />
 
-        <div className="grid grid-cols-2 gap-4 mb-4 max-w-xs">
-          <label className="flex flex-col text-sm text-gray-700 dark:text-gray-300">
+        <div className="flex flex-nowrap gap-4 mb-4">
+          <label className="flex flex-col text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
             Tamanho do cartão
             <select
               className="border rounded px-2 py-1 mt-1"
@@ -72,12 +80,12 @@ export default function SorteioPage() {
               {Array.from({ length: 6 }, (_, i) => 15 + i).map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
-          <label className="flex flex-col text-sm text-gray-700 dark:text-gray-300">
-            Quantidade de cartões
+          <label className="flex flex-col text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+            Qtd cartões
             <input
               type="number"
               min={1}
-              className="border rounded px-2 py-1 mt-1"
+              className="border rounded px-2 py-1 mt-1 w-32"
               value={quantidade}
               onChange={e => { setResultado(null); setQuantidade(Math.max(1, +e.target.value)); }}
             />
@@ -120,7 +128,17 @@ export default function SorteioPage() {
             <div className="flex flex-col gap-3 max-h-128 overflow-y-auto">
               {resultado.cartelas.map((cartela, index) => (
                 <div key={index} className="border rounded p-2">
-                  <p className="text-xs text-gray-500 mb-1">Cartão {index + 1}</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-xs text-gray-500">Cartão {index + 1}</p>
+                    <button
+                      type="button"
+                      onClick={() => copiarCartela(cartela, index)}
+                      title={`Copiar cartão ${index + 1}`}
+                      className="p-1 rounded-md text-gray-500 hover:text-gray-800 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      {copiadoIndex === index ? <Icons.tabler.Check size={16} className="text-green-600 dark:text-green-500" /> : <Icons.tabler.Copy size={16} />}
+                    </button>
+                  </div>
                   <CartaoLotofacil cartao15={cartela} />
                 </div>
               ))}
