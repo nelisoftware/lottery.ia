@@ -20,7 +20,7 @@ import {
   IMPARES,
 } from "@/libraries/lotofacil/ciclos";
 import prisma from "@/libraries/prisma/prisma";
-import { CreateLotofacil, CreateLotofacilLinha, LotofacilCaixa } from "@/types/types";
+import { CreateLotofacil, CreateLotofacilLinha, LotofacilCaixa, LotofacilCaixaOficial } from "@/types/types";
 import {
   LotofacilCiclo,
   LotofacilCicloColuna1,
@@ -43,6 +43,7 @@ import {
   LotofacilPares,
 } from "@prisma/client";
 import axios from "axios";
+import https from "https";
 import { DateTime } from "luxon";
 import { NextResponse } from "next/server";
 import maintenanceLotoFacil from "./maintenance";
@@ -50,9 +51,34 @@ import maintenanceLotoFacil from "./maintenance";
 export const preferredRegion = "gru1";
 export const maxDuration = 60;
 
-export async function GET() {
-  const url = "https://loteriascaixa-api.herokuapp.com/api/lotofacil";
+const URL_CAIXA = "https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil";
+const URL_ALTERNATIVA = "https://loteriascaixa-api.herokuapp.com/api/lotofacil";
+const httpsAgentCaixa = new https.Agent({ rejectUnauthorized: false });
 
+// busca na fonte oficial da Caixa e, se falhar, na API alternativa.
+// sem `numero` traz o último concurso. Retorna sempre no formato da API alternativa.
+async function buscarConcurso(numero?: number): Promise<LotofacilCaixa> {
+  try {
+    const { data } = await axios.get<LotofacilCaixaOficial>(URL_CAIXA + (numero ? "/" + numero : ""), {
+      httpsAgent: httpsAgentCaixa,
+      timeout: 10000,
+    });
+    return {
+      concurso: data.numero,
+      data: data.dataApuracao,
+      dezenas: data.listaDezenas,
+      premiacoes: [
+        { descricao: "15 acertos", faixa: 1, ganhadores: data.listaRateioPremio[0].numeroDeGanhadores, valorPremio: 0 },
+      ],
+    };
+  } catch (error) {
+    console.log("fonte Caixa falhou, usando fonte alternativa. concurso:", numero ?? "último");
+    const { data } = await axios.get<LotofacilCaixa>(URL_ALTERNATIVA + "/" + (numero ?? "latest"), { timeout: 30000 });
+    return data;
+  }
+}
+
+export async function GET() {
   // preparando ambientes bancos que são necessários ter dados perfeitos
   const maintenance = await maintenanceLotoFacil();
   if (maintenance === "erro") {
@@ -60,7 +86,7 @@ export async function GET() {
   }
 
   try {
-    const data = await axios.get<LotofacilCaixa>(url + "/latest").then(response => response.data);
+    const data = await buscarConcurso();
     const lastConcurso = await prisma.lotofacil.findFirst({
       orderBy: {
         numero: "desc",
@@ -245,7 +271,7 @@ export async function GET() {
       let tries = 0;
       while (tries <= 5) {
         try {
-          const { data } = await axios<LotofacilCaixa>(url + "/" + i, { timeout: 30000 });
+          const data = await buscarConcurso(i);
           tries = 6;
           const dezenas = data.dezenas.map(dezena => +dezena);
           const dataConvertida = DateTime.fromFormat(data.data, "dd/MM/yyyy", { zone: "utc" }).toISO();

@@ -7,6 +7,14 @@ export type LotofacilCaixa = {
   premiacoes: Premiacao[];
 };
 
+// formato retornado pela API oficial da Caixa (servicebus2.caixa.gov.br)
+export type LotofacilCaixaOficial = {
+  numero: number;
+  dataApuracao: string;
+  listaDezenas: string[];
+  listaRateioPremio: { numeroDeGanhadores: number }[];
+};
+
 type Premiacao = {
   descricao: string;
   faixa: number;
